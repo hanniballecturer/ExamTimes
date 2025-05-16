@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Time Calculator</title>
+</head>
+<body>
+    <h2>Exam Time Calculator</h2>
+    <label for="duration">Exam Duration (hours:minutes): </label>
+    <input type="text" id="duration" placeholder="e.g. 1:45"><br><br>
+
+    <label for="extra">Extra Time (%): </label>
+    <input type="number" id="extra" placeholder="e.g. 25"><br><br>
+
+    <button onclick="calculateTimes()">Calculate Exam Times</button>
+
+    <h3>Results:</h3>
+    <p>Start Time: <span id="startTime"></span></p>
+    <p>End Time (Regular): <span id="endTimeRegular"></span></p>
+    <p>End Time (Extra Time): <span id="endTimeExtra"></span></p>
+
+    <script>
+        function calculateTimes() {
+            let now = new Date();
+            let startTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            let durationInput = document.getElementById("duration").value;
+            let extraTimeInput = document.getElementById("extra").value;
+
+            if (!durationInput.match(/^\d+:\d{2}$/)) {
+                alert("Please enter duration in correct format (HH:MM)");
+                return;
+            }
+
+            let [hours, minutes] = durationInput.split(":").map(Number);
+            let durationMinutes = (hours * 60) + minutes;
+
+            let extraMinutes = extraTimeInput ? durationMinutes * (extraTimeInput / 100) : 0;
+            let endTimeRegular = new Date(now.getTime() + durationMinutes * 60000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            let endTimeExtra = new Date(now.getTime() + (durationMinutes + extraMinutes) * 60000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            document.getElementById("startTime").textContent = startTime;
+            document.getElementById("endTimeRegular").textContent = endTimeRegular;
+            document.getElementById("endTimeExtra").textContent = endTimeExtra;
+        }
+    </script>
+</body>
+</html>
+
